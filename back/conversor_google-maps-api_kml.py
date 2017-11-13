@@ -3,7 +3,7 @@ import json
 import urllib.request
 from pprint import pprint
 
-request_url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-23.5453653,-46.6357204&radius=125&type=parking&key=SUA-CHAVE-DA-API-DE-GMAPS'
+request_url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-23.5453653,-46.6357204&radius=125&type=parking&key=AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc'
 # location: two numbers
 # radius: a number 
 # type: an item from list

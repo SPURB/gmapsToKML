@@ -10,7 +10,7 @@
 export default{
     data: function(){
         return{
-            title:"Conversão de locais definidos na API do google maps em KML"
+            title: "Conversão de locais definidos na API do google maps em KML"
         }
     }
 }    
