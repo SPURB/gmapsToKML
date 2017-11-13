@@ -62,6 +62,20 @@
             </div>
         </form>
         <div class="row" id="map"></div>
+
+        <gmap-map 
+            :center="{lat: mapViewLatitude, lng: mapViewLongitude}"
+            :zoom="mapViewZoom">
+            <gmap-marker
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center=m.position"
+            ></gmap-marker>
+        </gmap-map>
+
         <div class="row">
             <button 
                 class="button-primary" 
@@ -72,6 +86,18 @@
     </div>
 </template>
 <script>
+
+import * as VueGoogleMaps from 'vue2-google-maps';
+import Vue from 'vue';
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc'
+    // v: 'OPTIONAL VERSION NUMBER',
+    // libraries: 'places' //// If you need to use place input
+  }
+});
+
 export default{
     data: function(){
         return{
@@ -200,7 +226,8 @@ export default{
             map: map,
             center: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
             radius: this.mapSearchRadius
-        }); this.submitPoint();
+        }); 
+        this.submitPoint();
       },
       submitPoint: function(){
           document.getElementById('submitPoint').addEventListener('click', function() {
