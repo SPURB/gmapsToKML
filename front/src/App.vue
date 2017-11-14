@@ -6,9 +6,19 @@
 </template>
 
 <script>
+import * as VueGoogleMaps from 'vue2-google-maps';
+import Vue from 'vue';
 import Header from './components/Header.vue';
 import FormMap from './components/FormMap.vue';
-import Gmaps from './components/Gmaps.vue';
+
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc',
+    // v: 'OPTIONAL VERSION NUMBER',
+    libraries: 'places' //// If you need to use place input
+  }
+});
 
 export default {
   components: {
@@ -16,5 +26,4 @@ export default {
     'app-formmap': FormMap
   }
 }
-
 </script>
