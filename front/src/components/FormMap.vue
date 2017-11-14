@@ -1,30 +1,37 @@
 <template>
     <div class='row'>
-        <form id="kml_data" onsubmit="retrieveData()">
+
+        <!-- <form id="kml_data"> -->
+
+        <gmap-map 
+            :center="newMapCenter"
+            :zoom="mapViewZoom"
+             class="map-container">
+        </gmap-map>
             <div class="row">
                 <div class="ten columns">
-                  <label for="location">Localização da pesquisa</label>
+                  <label>Localização da pesquisa</label>
                   <input 
+                    v-model="address"
                     class="u-full-width" 
-                    id="address" 
                     type="text" 
-                    placeholder="Exemplo: Rua Libero Badaró, 405, Centro,  São Paulo">
+                    >
                 </div>
 
-                <div class="two columns">
-                  <label for="submitPoint">Ponto</label>
+                <div class="two columns submit_forms">
+                  <label>Ponto</label>
                   <input 
-                    id="submitPoint" 
+                    @click="submitPoint"
+                    id="BTNsubmitPoint"
                     type="button" 
                     value="Localizar" 
                     class="button-primary">
                 </div>
             </div>
 
-            <div class="row">
+<!--             <div class="row">
                 <div class="three columns submit_forms">
                     <label for='rangeInput'>Raio de pesquisa</label>
-                    <!-- <input type="range" name="rangeInput" min="0" max="500" onchange="updateTextInput(this.value);"> -->
                     <input 
                         type="range" 
                         name="rangeInput" 
@@ -60,51 +67,33 @@
                         id="refreshPoints">Atualizar</button>
                 </div>
             </div>
-        </form>
-        <div class="row" id="map"></div>
+ -->
+        <!-- </form> -->
 
-        <gmap-map 
-            :center="{lat: mapViewLatitude, lng: mapViewLongitude}"
-            :zoom="mapViewZoom">
-            <gmap-marker
-              :key="index"
-              v-for="(m, index) in markers"
-              :position="m.position"
-              :clickable="true"
-              :draggable="true"
-              @click="center=m.position"
-            ></gmap-marker>
-        </gmap-map>
-
-        <div class="row">
+<!--         <div class="row">
             <button 
                 class="button-primary" 
-                type="submit" 
-                onclick="submitDataToServer()" 
                 id="kmlMaker">Gerar arquivo KML de {{ formData.locationType.text  }}</button>
-        </div>
+        </div> -->
+
+<!-- temporario -->
+<p>
+address: {{ address }} <br>
+center: {{ newMapCenter }} <br>
+
+</p>
     </div>
 </template>
 <script>
 
-import * as VueGoogleMaps from 'vue2-google-maps';
-import Vue from 'vue';
-
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc'
-    // v: 'OPTIONAL VERSION NUMBER',
-    // libraries: 'places' //// If you need to use place input
-  }
-});
-
 export default{
     data: function(){
-        return{
-            title:"Conversão de locais definidos na API do google maps em KML",
-            mapSearchRadius: 1000,
-            mapViewLatitude: -23.5453653,
-            mapViewLongitude: -46.6357204,
+        return {
+            address:'',
+            title:'Conversão de locais definidos na API do google maps em KML',
+            // mapSearchRadius: 1000,
+            mapCenter: [],
+            newMapCenter:{lat: -23.5453653, lng: -46.6357204},
             mapViewZoom: 15,
             formData: {
               radiusInput: 500,
@@ -205,67 +194,91 @@ export default{
             ]
         }
     }, 
-    methods:{
-      initMap: function(){
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
-          zoom: this.mapViewZoom
-        });
-        infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
-        service.nearbySearch({
-          location: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
-          radius: this.mapSearchRadius,
-          type: ['university']
-        }, this.callback);
-        var searchR = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 1,
-            fillOpacity: 0,
-            map: map,
-            center: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
-            radius: this.mapSearchRadius
-        }); 
-        this.submitPoint();
-      },
-      submitPoint: function(){
-          document.getElementById('submitPoint').addEventListener('click', function() {
-          var address = document.getElementById('address').value;
-          new google.maps.Geocoder().geocode({'address': address}, function(results, status) {
-            if (status === 'OK') {
-              map.setCenter(results[0].geometry.location);
-              var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-              })
-              console.log(marker.position.lat(this));
-              console.log(marker.position.lng(this));
-            } 
-            else {
-              alert('Falha na geocodificação: Insira um endereço válido');
-              console.log(status);
-            }
-          });
-        });
-        },
-      callback: function(results, status){
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-              this.createMarker(results[i]);
-          }
+    watch:{
+        mapCenter: function(){
+            this.newMapCenter = this.mapCenter[0]
         }
+    },
+
+    methods: {
+      //   initMap: function(){
+      //     console.log('initMap');
+      //     // map = new google.maps.Map(document.getElementById('map'), {
+      //     //   center: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
+      //     //   zoom: this.mapViewZoom
+      //     // });
+      //     // infowindow = new google.maps.InfoWindow();
+      //     // var service = new google.maps.places.PlacesService(map);
+      //     // service.nearbySearch({
+      //     //   location: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
+      //     //   radius: this.mapSearchRadius,
+      //     //   type: ['university']
+      //     // }, this.callback);
+      //     // var searchR = new google.maps.Circle({
+      //     //     strokeColor: '#FF0000',
+      //     //     strokeOpacity: 0.8,
+      //     //     strokeWeight: 1,
+      //     //     fillOpacity: 0,
+      //     //     map: map,
+      //     //     center: {lat:this.mapViewLatitude, lng:this.mapViewLongitude},
+      //     //     radius: this.mapSearchRadius
+      //     // }); 
+      //     // this.submitPoint();
+      // },
+        submitPoint: function(){
+
+        var addressToGeocode = this.address; 
+        var searchCoordinates = new Array();
+
+        new google.maps.Geocoder().geocode({'address':addressToGeocode}, function(results, status){
+                if (status === 'OK') {
+                    var newLat = results[0].geometry.location.lat(this);//aqui "this" se refere à esta instância de Geocoder
+                    var newLng = results[0].geometry.location.lng(this);
+                    searchCoordinates.push({lat:newLat, lng:newLng});
+                }
+                else {
+                    alert('Falha na geocodificação: Insira um endereço válido')
+                }
+            })
+        this.mapCenter = searchCoordinates;
+        // console.log(addressToGeocode)
+
+        // document.getElementById('submitPoint').addEventListener('click', function() {
+        // var address = document.getElementById('address').value;
+        // new google.maps.Geocoder().geocode({'address': address}, function(results, status) {
+        //       if (status === 'OK') {
+        //         map.setCenter(results[0].geometry.location);
+        //         var marker = new google.maps.Marker({
+        //           map: map,
+        //           position: results[0].geometry.location
+        //         })
+        //         console.log(marker.position.lat(this));
+        //         console.log(marker.position.lng(this));
+        //       } 
+        //       else {
+        //         alert('Falha na geocodificação: Insira um endereço válido');
+        //         console.log(status);
+        //       }
+        //   });
+        // });
+      },
+      callback: function(results, status){
+        // if (status === google.maps.places.PlacesServiceStatus.OK) {
+        //   for (var i = 0; i < results.length; i++) {
+        //       this.createMarker(results[i]);
+        //   }
+        // }
       },
       createMarker: function(place){
-        var marker = new google.maps.Marker({
-            map: map,
-            position: place.geometry.location
-        });
-        google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(place.name);
-            infowindow.open(map, this);
-        });
+        // var marker = new google.maps.Marker({
+        //     map: map,
+        //     position: place.geometry.location
+        // });
+        // google.maps.event.addListener(marker, 'click', function() {
+        //     infowindow.setContent(place.name);
+        //     infowindow.open(map, this);
+        // });
       }
-    }
+    },
 }
 </script>

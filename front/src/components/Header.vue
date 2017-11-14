@@ -1,7 +1,7 @@
 <template>
     <div class=row>
         <div id="intro" class='twelve columns'>
-            <h5>{{title}}</h5>
+            <h5>{{ title }}</h5>
              <p>Fonte: <a href="https://developers.google.com/maps/documentation/javascript/places/" target="blank">API Google Maps Places</a></p>
         </div>
     </div>
