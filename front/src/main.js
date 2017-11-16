@@ -11,12 +11,5 @@ new Vue({
   render: h => h(App)
 })
 
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc',
-    libraries: 'places', // This is required if you use the Autocomplete plugin
-    // OR: libraries: 'places,drawing'
-    // OR: libraries: 'places,drawing,visualization'
-    // (as you require)
-  }
-})
+// GET from
+//https://maps.googleapis.com/maps/api/js?key=AIzaSyBdXi54F8bicR3FKfCDBQixW-9ZGFfR6pc
