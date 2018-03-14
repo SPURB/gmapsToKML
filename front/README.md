@@ -1,4 +1,4 @@
-## Build Setup
+## Para montar
 
 ``` bash
 # install dependencies
@@ -10,3 +10,4 @@ npm run dev
 # build for production with minification
 npm run build
 ```
+
